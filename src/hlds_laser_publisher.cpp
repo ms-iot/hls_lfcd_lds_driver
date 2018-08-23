@@ -31,8 +31,14 @@
 
  /* Authors: SP Kong, JH Yang */
  /* maintainer: Pyo */
+ #define _USE_MATH_DEFINES
 
 #include <ros/ros.h>
+
+#ifdef WIN32
+#include <winsock2.h>
+#endif
+
 #include <std_msgs/UInt16.h>
 #include <sensor_msgs/LaserScan.h>
 #include <boost/asio.hpp>
@@ -56,7 +62,6 @@ LFCDLaser::~LFCDLaser()
 
 void LFCDLaser::poll(sensor_msgs::LaserScan::Ptr scan)
 {
-  uint8_t temp_char;
   uint8_t start_count = 0;
   bool got_scan = false;
   boost::array<uint8_t, 2520> raw_bytes;
@@ -88,11 +93,11 @@ void LFCDLaser::poll(sensor_msgs::LaserScan::Ptr scan)
 
         boost::asio::read(serial_,boost::asio::buffer(&raw_bytes[2], 2518));
 
-        scan->angle_increment = (2.0*M_PI/360.0);
-        scan->angle_min = 0.0;
-        scan->angle_max = 2.0*M_PI-scan->angle_increment;
-        scan->range_min = 0.12;
-        scan->range_max = 3.5;
+        scan->angle_increment = (2.0f*M_PI/360.0f);
+        scan->angle_min = 0.0f;
+        scan->angle_max = 2.0f*M_PI-scan->angle_increment;
+        scan->range_min = 0.12f;
+        scan->range_max = 3.5f;
         scan->ranges.resize(360);
         scan->intensities.resize(360);
 

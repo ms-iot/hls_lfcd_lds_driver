@@ -32,7 +32,14 @@
 /* Authors: SP Kong, JH Yang, Pyo */
 /* maintainer: Pyo */
 
+ #define _USE_MATH_DEFINES
+
 #include <ros/ros.h>
+
+#ifdef WIN32
+#include <winsock2.h>
+#endif
+
 #include <sensor_msgs/LaserScan.h>
 #include <boost/asio.hpp>
 #include <hls_lfcd_lds_driver/hlds_laser_segment_publisher.h>
@@ -64,11 +71,11 @@ LFCDLaser::LFCDLaser(boost::asio::io_service& io)
   }
 
   scan_.header.frame_id = frame_id_;
-  scan_.angle_increment = (2.0*M_PI/360.0);
-  scan_.angle_min = 0.0;
-  scan_.angle_max = 2.0*M_PI-scan_.angle_increment;
-  scan_.range_min = 0.12;
-  scan_.range_max = 3.5;
+  scan_.angle_increment = (2.0f*M_PI/360.0f);
+  scan_.angle_min = 0.0f;
+  scan_.angle_max = 2.0f*M_PI-scan_.angle_increment;
+  scan_.range_min = 0.12f;
+  scan_.range_max = 3.5f;
   scan_.ranges.resize(360);
   scan_.intensities.resize(360);
 
